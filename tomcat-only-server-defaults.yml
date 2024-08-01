@@ -1,0 +1,26 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: just a practice stack.
+Resources:
+  tomcatserver:
+    Type: 'AWS::EC2::Instance'
+    Properties: 
+      ImageId: ami-0427090fd1714168b
+      InstanceType: t2.micro
+      KeyName: desktop
+      Tags:
+        -
+          Key: Name
+          Value: Tomcat-Server
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          sudo yum install git -y
+          sudo yum install java-1.8* -y
+          cd /opt/
+          sudo wget http://archive.apache.org/dist/tomcat/tomcat-8/v8.0.23/bin/apache-tomcat-8.0.23.tar.gz
+          sudo tar -xvzf apache-tomcat-8.0.23.tar.gz
+          sudo git clone https://github.com/hemanthkuncha/javaprojects.git
+          sudo cp /opt/javaprojects/target/local-war-linix.war /opt/apache-tomcat-8.0.23/webapps/
+          sudo cp ./javaprojects/tomcat-users.xml /opt/apache-tomcat-8.0.23/conf/
+          cd /opt/apache-tomcat-8.0.23/bin/
+          sudo ./startup.sh
