@@ -6,7 +6,7 @@ Resources:
     Properties: 
       ImageId: ami-0427090fd1714168b
       InstanceType: t2.micro
-      KeyName: desktop
+      KeyName: laptop
       Tags:
         -
           Key: Name
@@ -14,7 +14,7 @@ Resources:
       UserData:
         Fn::Base64: !Sub |
           #!/bin/bash
-          sudo yum update –y
+          sudo yum -y update
           sudo wget -O /etc/yum.repos.d/jenkins.repo \
           https://pkg.jenkins.io/redhat-stable/jenkins.repo
           sudo rpm --import https://pkg.jenkins.io/redhat-stable/jenkins.io-2023.key
@@ -23,5 +23,4 @@ Resources:
           sudo yum install jenkins -y
           sudo systemctl enable jenkins
           sudo systemctl start jenkins
-          sudo systemctl status jenkins
           sudo cat /var/lib/jenkins/secrets/initialAdminPassword > ~/passwd.txt
