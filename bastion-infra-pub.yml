@@ -1,0 +1,126 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: just a practice stack.
+Resources:
+  testvpc:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 20.0.0.0/20
+      EnableDnsSupport: 'true'
+      EnableDnsHostnames: 'true'
+      Tags:
+       - Key: Name
+         Value: test-vpc-da
+  SG:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupName: "SecurityGroup"
+      GroupDescription: "traffic in from hosted static ips, and RDP in from a personal workstation"
+      VpcId: !Ref testvpc
+      SecurityGroupIngress:
+        - IpProtocol: -1
+          CidrIp: 0.0.0.0/0
+      SecurityGroupEgress:
+        - IpProtocol: -1
+          CidrIp: 0.0.0.0/0
+      Tags:
+        -
+          Key: Name
+          Value:  SG-da
+  pubsub:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref testvpc
+      CidrBlock: 20.0.0.0/22
+      AvailabilityZone: "us-east-1a"
+      MapPublicIpOnLaunch: "true"
+      Tags:
+      - Key: Name
+        Value: pub-sub-da
+  pvtsub:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref testvpc
+      CidrBlock: 20.0.4.0/22
+      AvailabilityZone: "us-east-1a"
+      Tags:
+      - Key: Name
+        Value: pvt-sub-da
+  pubrt:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:  
+        Ref: testvpc
+      Tags:
+      - Key: Name
+        Value: pub-rt-da
+  pvtrt:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:  
+        Ref: testvpc
+      Tags:
+      - Key: Name
+        Value: pvt-rt-da
+  pubsubpubrt:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId:
+        Ref: pubsub
+      RouteTableId:
+        Ref: pubrt
+  pvtsubpvtrt:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId:
+        Ref: pvtsub
+      RouteTableId:
+        Ref: pvtrt
+  IGW:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+      - Key: Name
+        Value: IGW-da
+  AttachGateway:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId:
+         Ref: testvpc
+      InternetGatewayId:
+         Ref: IGW
+  pubrtIGW:
+    Type: AWS::EC2::Route
+    DependsOn: AttachGateway
+    Properties:
+       RouteTableId:
+         Ref: pubrt
+       DestinationCidrBlock: 0.0.0.0/0
+       GatewayId:
+         Ref: IGW
+  pubserver:
+    Type: 'AWS::EC2::Instance'
+    Properties: 
+      ImageId: ami-0427090fd1714168b
+      InstanceType: t2.micro
+      KeyName: laptop
+      SubnetId: !Ref pubsub
+      SecurityGroupIds:
+        - Ref: SG
+      Tags:
+        -
+          Key: Name
+          Value: pub-Server
+  pvtserver:
+    Type: 'AWS::EC2::Instance'
+    Properties: 
+      ImageId: ami-0427090fd1714168b
+      InstanceType: t2.micro
+      KeyName: laptop
+      SubnetId: !Ref pvtsub
+      SecurityGroupIds:
+        - Ref: SG
+      Tags:
+        -
+          Key: Name
+          Value: pvt-Server
+  
