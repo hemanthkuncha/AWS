@@ -24,4 +24,4 @@ Resources:
           sudo systemctl enable jenkins
           sudo systemctl start jenkins
           sudo cp /var/lib/jenkins/secrets/initialAdminPassword /home/ec2-user/txt.txt
-          sudo chown ec2-user:ec2-user txt.txt
+          sudo chmod a=rwx txt.txt
