@@ -23,4 +23,5 @@ Resources:
           sudo yum install jenkins -y
           sudo systemctl enable jenkins
           sudo systemctl start jenkins
-          sudo cat /var/lib/jenkins/secrets/initialAdminPassword > ~/passwd.txt
+          sudo cp /var/lib/jenkins/secrets/initialAdminPassword /home/ec2-user/txt.txt
+          sudo chown ec2-user:ec2-user txt.txt
