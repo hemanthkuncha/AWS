@@ -1,0 +1,37 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: just a practice stack.
+Resources:
+  ansibleserver:
+    Type: 'AWS::EC2::Instance'
+    Properties: 
+      ImageId: ami-0427090fd1714168b
+      InstanceType: t2.micro
+      KeyName: laptop
+      Tags:
+        -
+          Key: Name
+          Value: Ansible-Master
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          sudo yum install ansible -y && sudo touch /etc/ansible/hosts
+  ansible1slave:
+    Type: 'AWS::EC2::Instance'
+    Properties: 
+      ImageId: ami-0427090fd1714168b
+      InstanceType: t2.micro
+      KeyName: laptop
+      Tags:
+        -
+          Key: Name
+          Value: Ansible-1Slave
+  ansible2slave:
+    Type: 'AWS::EC2::Instance'
+    Properties: 
+      ImageId: ami-0427090fd1714168b
+      InstanceType: t2.micro
+      KeyName: laptop
+      Tags:
+        -
+          Key: Name
+          Value: Ansible-2Slave
