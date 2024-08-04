@@ -1,0 +1,18 @@
+#ansible config
+/etc/ansible/hosts
+scp -i .\laptop.pem .\laptop.pem ec2-user@54.175.1.126:~
+chmod 400 laptop.pem
+
+sudo nano /etc/ansible/hosts-
+----------------------------------------------------------------------------------
+[web]
+w1 ansible_host=172.31.57.49 ansible_user=ec2-user ansible_ssh_private_key_file=/home/ec2-user/laptop.pem
+[db]
+db1 ansible_host=172.31.50.215 ansible_user=ec2-user ansible_ssh_private_key_file=/home/ec2-user/laptop.pem
+[app]
+app1 ansible_host=172.31.51.165 ansible_user=ec2-user ansible_ssh_private_key_file=/home/ec2-user/laptop.pem
+======================================================================================
+
+ansible --list inventory
+
+ansible --list-hosts all
