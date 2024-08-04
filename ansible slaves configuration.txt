@@ -12,6 +12,9 @@ db1 ansible_host=172.31.50.215 ansible_user=ec2-user ansible_ssh_private_key_fil
 [app]
 app1 ansible_host=172.31.51.165 ansible_user=ec2-user ansible_ssh_private_key_file=/home/ec2-user/laptop.pem
 ======================================================================================
+ ansible all -m ping
+ ansible web -m ping
+
 
 ansible --list inventory
 
