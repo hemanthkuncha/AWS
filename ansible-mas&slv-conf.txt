@@ -35,3 +35,13 @@ Resources:
         -
           Key: Name
           Value: Ansible-2Slave
+  ansible3slave:
+    Type: 'AWS::EC2::Instance'
+    Properties: 
+      ImageId: ami-0427090fd1714168b
+      InstanceType: t2.micro
+      KeyName: laptop
+      Tags:
+        -
+          Key: Name
+          Value: Ansible-3Slave
