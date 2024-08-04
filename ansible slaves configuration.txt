@@ -12,11 +12,64 @@ db1 ansible_host=172.31.50.215 ansible_user=ec2-user ansible_ssh_private_key_fil
 [app]
 app1 ansible_host=172.31.51.165 ansible_user=ec2-user ansible_ssh_private_key_file=/home/ec2-user/laptop.pem
 ======================================================================================
- ansible all -m ping
- ansible web -m ping
-
-ansible all -m command -a "ls -la"
-
 ansible --list inventory
 
 ansible --list-hosts all
+
+--------
+
+ansible all -m ping
+ ansible web -m ping
+
+ansible all -m command -a "ls -la"
+ansible all -m file -a "path=/home/ec2-user/sample.txt state=touch"
+++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+PLAYBOOKS
+
+mkdir playbooks
+cd playbooks/
+vi play.yml
+////////////////////////////////////////////
+---
+- name: Update web servers
+  hosts: web
+
+  tasks:
+  - name: Creating an web.txt file
+    file:
+      path: "/home/ec2-user/web.txt"
+      state: touch
+    become: yes
+
+  - name: Creating an web2.txt file
+    file:
+      path: "/home/ec2-user/web2.txt"
+      state: touch
+    become: yes
+
+- name: Update db servers
+  hosts: db
+
+  tasks:
+  - name: createing db.txt file
+    file:
+      path: "/home/ec2-user/db.txt"
+      state: touch
+    become: yes
+
+- name: Update app servers
+  hosts: app
+
+  tasks:
+  - name: createing app.txt file
+    file:
+      path: "/home/ec2-user/app.txt"
+      state: touch
+    become: yes
+////////////////////////////////////////////////
+
+ansible-playbook play.yml
+
+ansible all -m command -a "ls"
+
+
