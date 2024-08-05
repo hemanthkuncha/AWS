@@ -31,3 +31,35 @@
   - name: create pod
     ansible.builtin.command:
       cmd: docker run -dt --name mypod -p 8090:80 httpd
+---------------------------------------------------------
+
+tasks:
+  - name: install
+    yum:
+      name:
+        - git
+        - docker
+
+  - name: Give insecure permissions to an existing file
+    ansible.builtin.file:
+      path: /run/docker.sock
+      owner: root
+      group: docker
+      mode: 'u=rw,g=rw,o=rw'
+
+  - name: Enable service docker, Start service enable
+    ansible.builtin.service:
+      name: docker
+      state: started
+      enabled: yes
+
+  - name: clone repo
+    ansible.builtin.git:
+      repo: https://github.com/hemanthkuncha/javaprojects.git
+      dest: /home/ec2-user/artifacts
+
+  - name: Touch a file, using symbolic modes to set the permissions (equivalent to 0644)
+    ansible.builtin.file:
+      path: /home/ec2-user/artifacts/Dockerfile
+      state: touch
+      mode: u=rw,g=r,o=r
