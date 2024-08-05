@@ -1,0 +1,33 @@
+---
+- name: Update web servers
+  hosts: web
+  remote_user: root
+  become: true
+
+  tasks:
+  - name: install
+    yum:
+      name:
+        - git
+        - docker
+
+  - name: Give insecure permissions to an existing file
+    ansible.builtin.file:
+      path: /run/docker.sock
+      owner: root
+      group: docker
+      mode: 'u=rw,g=rw,o=rw'
+
+  - name: Enable service docker, Start service enable
+    ansible.builtin.service:
+      name: docker
+      state: started
+      enabled: yes
+
+  - name: remove pod
+    ansible.builtin.command:
+      cmd: docker rm -f mypod
+
+  - name: create pod
+    ansible.builtin.command:
+      cmd: docker run -dt --name mypod -p 8090:80 httpd
