@@ -1,0 +1,33 @@
+---
+- name: Update web servers
+  hosts: web
+  remote_user: root
+
+  tasks:
+  - name: install git
+    command: sudo yum install git -y
+
+  - name: install java
+    command: sudo yum install java-1.8* -y
+
+  - name: changing directorty to opt
+    command: wget http://archive.apache.org/dist/tomcat/tomcat-8/v8.0.23/bin/apache-tomcat-8.0.23.tar.gz
+
+  - name: untaring tomcat
+    command: tar -xvzf apache-tomcat-8.0.23.tar.gz
+
+  - name: remove old artifacts
+    command: sudo rm -rf /home/ec2-user/javaprojects
+
+  - name: clone repo
+    command: git clone https://github.com/hemanthkuncha/javaprojects.git
+
+  - name: copy artifacts to tomcat
+    command: sudo cp /home/ec2-user/javaprojects/target/local-war-linix.war /home/ec2-user/apache-tomcat-8.0.23/webapps/
+
+  - name: copy tomcat conf file
+    command: sudo cp /home/ec2-user/javaprojects/tomcat-users.xml /home/ec2-user/apache-tomcat-8.0.23/conf/
+
+  - name: start tomcat
+    command: ./apache-tomcat-8.0.23/bin/startup.sh
+    become: true
