@@ -47,5 +47,3 @@
     ansible.builtin.shell:
       cmd: ./startup.sh
       chdir: /opt/apache-tomcat-8.0.23/bin/
-    command: ./apache-tomcat-8.0.23/bin/startup.sh
-    become: true
