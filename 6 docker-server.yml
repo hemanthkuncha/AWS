@@ -16,6 +16,6 @@ Resources:
           #!/bin/bash
           yum install docker
           yum install git
-          chmod 666 /run/docker.sock
+          # chmod 666 /run/docker.sock- not working
           systemctl start docker
           systemctl enable docker
