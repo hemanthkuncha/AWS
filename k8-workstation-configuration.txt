@@ -1,0 +1,10 @@
+Install - aws cli, kubectl, kops. aws --version/kubectl version/kops version
+
+add ec2-aws-service role --a ssign to ec2
+
+aws s3 ls
+aws s3 mb s3://k8-101101
+export KOPS_STATE_STORE=s3://k8-101101
+ssh-keygen
+
+kops create cluster --name=mycluster.k8.local --state=s3://k8-101101 --cloud=aws --zones=us-east-1a,us-east-1b --node-count=3 --node-size=t2.micro --master-size=t2.micro --yes
