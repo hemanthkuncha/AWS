@@ -1,0 +1,2 @@
+we can change the running services *declarative manifest*
+
