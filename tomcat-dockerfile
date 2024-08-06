@@ -12,3 +12,17 @@ CMD ["catalina.sh", "run"]
 
 --------------------------------------------------------
 
+git clone https://github.com/hemanthkuncha/javaprojects.git
+
+cd javaprojects
+
+vi Dockerfile
+
+# paste the above content.
+--------------------------
+
+docker chmod 666 /run/docker.sock
+
+docker build -tag web . 
+
+docker run -dt --name web -p 9000:8080 web
