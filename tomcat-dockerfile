@@ -1,0 +1,10 @@
+FROM tomcat:8.0-alpine
+LABEL maintainer="hemanthk"
+
+ADD  ./local-war-linix.war /usr/local/tomcat/webapps/
+COPY ../target/tomcat-users.xml /usr/local/tomcat/conf/
+EXPOSE 8080
+CMD ["catalina.sh", "run"]
+
+--------------------------------------------------------
+
