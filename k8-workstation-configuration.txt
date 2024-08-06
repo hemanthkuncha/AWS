@@ -8,3 +8,31 @@ export KOPS_STATE_STORE=s3://k8-101101
 ssh-keygen
 
 kops create cluster --name=mycluster.k8.local --state=s3://k8-101101 --cloud=aws --zones=us-east-1a,us-east-1b --node-count=3 --node-size=t2.micro --master-size=t2.micro --yes
+
+kops validate cluster "cluster name"
+
+kops get all "cluster name"
+
+kubectl run web --image=httpd
+kubectl describe pod web 
+kubectl delete pod web
+kubectl get pods
+kubectl get all
+
+----------------
+
+kubectl create deployment web --image=httpd      ----(creating deployment creates replicasets&pods) -- auto scalling works with deployment sets.
+kubectl delete "pod-id"
+kubectl delete deployment
+kubectl get all/deployment/pods/replicas
+----------------------------------------
+
+kubectl create deployment web --image=httpd --replicas=4
+kubectl delete "pod/replica/deployment-id"
+
+-------------------------------------
+Exposing to public with loadbalancer
+-------------------------------------
+
+kubectl expose deployment.app/web --port 80 --name httpd-service --type LoadBalancer
+
