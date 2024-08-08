@@ -2,6 +2,7 @@
 COMMANDS:
 java version changing :          update-alternatives --config java 
 
+jenkins - agent : new jenkins support after java-11, ssh-keys should be ssh-keygen -t rsa -b 2048 -m PEM more secure
 
 
 
