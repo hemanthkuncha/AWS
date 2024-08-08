@@ -1,6 +1,7 @@
 # AWS
 COMMANDS:
 java version changing :          update-alternatives --config java 
+copy public key to other server  ; ssh-copy-id ubuntu@10.0.24.186
 
 jenkins - agent : new jenkins support after java-11, ssh-keys should be ssh-keygen -t rsa -b 2048 -m PEM more secure
 
