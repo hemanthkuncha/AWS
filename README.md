@@ -14,3 +14,12 @@ jenkins - agent : new jenkins support after java-11, ssh-keys should be ssh-keyg
 
 
 LINKS : tomcat 8 link - wget http://archive.apache.org/dist/tomcat/tomcat-8/v8.0.23/bin/apache-tomcat-8.0.23.tar.gz
+
+
+
+=====================================================================================================================
+What is the difference between the 'COPY' and 'ADD' commands in a Dockerfile?
+
+we can execute commands from outside the docker container -- docker exec -it test ls  --- (test=container name)
+
+docker-ansible integraton with sshkeys vs ansible master-slave congiguration with .pem key
