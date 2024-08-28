@@ -23,3 +23,8 @@ What is the difference between the 'COPY' and 'ADD' commands in a Dockerfile?
 we can execute commands from outside the docker container -- docker exec -it test ls  --- (test=container name)
 
 docker-ansible integraton with sshkeys vs ansible master-slave congiguration with .pem key
+
+
+Now to refresh and reload group membership on Linux without rebooting or logging/logout in again by using the following newgrp command:
+newgrp {groupname}
+newgrp sales
