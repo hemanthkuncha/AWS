@@ -1,0 +1,116 @@
+AWSTemplateFormatVersion: "2010-09-09"
+Description: My ansible prac with cloudformation also..
+Resources:
+  TCSVPC:
+    Type: AWS::EC2::VPC
+    Properties:
+      CidrBlock: 25.0.0.0/24
+      Tags:
+       - Key: Name
+         Value: testVPC
+  MYTCSSGs:
+    Type: AWS::EC2::SecurityGroup
+    Properties:
+      GroupDescription: Allow http to client host
+      VpcId: !Ref TCSVPC
+      SecurityGroupIngress:
+        - IpProtocol: tcp
+          FromPort: 0
+          ToPort: 65535
+          CidrIp: 0.0.0.0/0
+      SecurityGroupEgress:
+        - IpProtocol: tcp
+          FromPort: 0
+          ToPort: 65535
+          CidrIp: 0.0.0.0/0
+  PUBSubnet:
+    Type: AWS::EC2::Subnet
+    Properties:
+      VpcId: !Ref TCSVPC
+      CidrBlock: 25.0.0.0/24
+      AvailabilityZone: "us-east-1a"
+      MapPublicIpOnLaunch: true
+      Tags:
+      - Key: Name
+        Value: PUBLIC-SUBNET
+  ACTInternetGateway:
+    Type: AWS::EC2::InternetGateway
+    Properties:
+      Tags:
+      - Key: Name
+        Value: ACT-INTRNET
+  ACTTCSAttachGateway:
+    Type: AWS::EC2::VPCGatewayAttachment
+    Properties:
+      VpcId: 
+        Ref: TCSVPC
+      InternetGatewayId:
+        Ref: ACTInternetGateway
+  PUBRouteTable:
+    Type: AWS::EC2::RouteTable
+    Properties:
+      VpcId:  
+        Ref: TCSVPC
+      Tags:
+      - Key: Name
+        Value: PUB-RT
+  MYSubnetRouteTableAssociation:
+    Type: AWS::EC2::SubnetRouteTableAssociation
+    Properties:
+      SubnetId:
+        Ref: PUBSubnet
+      RouteTableId:
+        Ref: PUBRouteTable
+  ACTPUBRoute:
+    Type: AWS::EC2::Route
+    DependsOn: ACTTCSAttachGateway
+    Properties:
+       RouteTableId:
+         Ref: PUBRouteTable
+       DestinationCidrBlock: 0.0.0.0/0
+       GatewayId:
+         Ref: ACTInternetGateway
+  MyEC2Instance1: 
+    Type: AWS::EC2::Instance
+    Properties: 
+      ImageId: ami-0a0e5d9c7acc336f1
+      InstanceType: t2.micro
+      KeyName: laptop
+      SubnetId: !Ref PUBSubnet
+      SecurityGroupIds:
+          - Ref: MYTCSSGs
+      Tags:
+      - Key: Name
+        Value: Ansible-Master
+      UserData:
+        Fn::Base64: !Sub |
+          #!/bin/bash
+          sudo apt update
+          sudo apt install -y ansible
+          sudo touch /home/ubuntu/hosts
+          sudo touch /home/ubuntu/inventory
+          sudo touch /home/ubuntu/inventory2
+  MyEC2Instance2: 
+    Type: AWS::EC2::Instance
+    Properties: 
+      ImageId: ami-0a0e5d9c7acc336f1
+      InstanceType: t2.micro
+      KeyName: laptop
+      SubnetId: !Ref PUBSubnet
+      SecurityGroupIds:
+          - Ref: MYTCSSGs
+      Tags:
+      - Key: Name
+        Value: Ansible-Slave1
+  MyEC2Instance3: 
+    Type: AWS::EC2::Instance
+    Properties: 
+      ImageId: ami-0a0e5d9c7acc336f1
+      InstanceType: t2.micro
+      KeyName: laptop
+      SubnetId: !Ref PUBSubnet
+      SecurityGroupIds:
+          - Ref: MYTCSSGs
+      Tags:
+      - Key: Name
+        Value: Ansible-Slave2
